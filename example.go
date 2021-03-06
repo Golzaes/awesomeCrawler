@@ -59,8 +59,8 @@ func XpathParseExample(body []byte) {
 	}
 }
 
-func main() {
-	body, _ := ScrapeExample()
-	//CssParseExample(body)
-	XpathParseExample(body)
-}
+// func main() {
+// 	body, _ := ScrapeExample()
+// 	//CssParseExample(body)
+// 	XpathParseExample(body)
+// }
