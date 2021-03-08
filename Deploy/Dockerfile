@@ -1,7 +1,19 @@
-FROM golang:1.5
-WORKDIR $GOPATH/src
+#FROM golang
+## 设置环境变量 GO111MODULE 使用启用模块依赖 CGO_ENABLED是否纯静态编译 GOOS系统
+#ENV GOPROXY=https://goproxy.cn,direct GO111MODULE="on" CGO_ENABLED="0" GOOS="linux" GOARCH="amd64"
+#ADD  . /go/src/github.com/payne/awesomeCrawler
+#WORKDIR /go/src/github.com/payne/awesomeCrawler
+#RUN go mod tidy && go build
+#CMD ./awesomeCrawler
+#################################
+FROM golang as builder
+ENV GOPROXY=https://goproxy.cn,direct GO111MODULE="on" CGO_ENABLED="0" GOOS="linux" GOARCH="amd64"
+WORKDIR /go/src/github.com/payne/awesomeCrawler/
 COPY . .
-ENV GOPROXY https://goproxy.io
-RUN go get ./... && go build
-#ENTRYPOINT  ["./main"]
-CMD ["go", "run", "main.go"]
+RUN go build -o /tmp/awesomeCrawler .
+
+FROM alpine
+WORKDIR /root/
+COPY --from=builder /tmp/awesomeCrawler .
+CMD ["./awesomeCrawler"]
+

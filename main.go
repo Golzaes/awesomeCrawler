@@ -10,6 +10,6 @@ func main() {
 		Method: "GET",
 		URL:    "https://book.douban.com/tag/?view=cloud",
 		//ParseFunc: Parser.CssParseTag,
-		ParseFunc: Parser.XpathParseTag,
+		ParseFunc: Parser.RegexParseTag,
 	})
 }
