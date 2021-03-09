@@ -16,18 +16,16 @@ func Fetch(method, url string) ([]byte, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
-		log.Printf("NewRequest Error:%#v", err)
-		return nil, err
+		return nil, fmt.Errorf(`NewRequest Error:%#v`, err)
 	}
-	req.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.192 Safari/537.36")
+	req.Header.Add(`User-Agent`, `Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.192 Safari/537.36`)
 	res, err := client.Do(req)
 	if err != nil {
-		log.Printf("Client Error:%#v", err)
-		return nil, err
+		return nil, fmt.Errorf(` Client Error:%#v`, err)
 	}
 	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("getting %s: %s", url, res.Status)
+		return nil, fmt.Errorf(` Get invalid status code %s while scraping %s`, res.Status, url)
 	}
 	// Detection encode，eg: UTF8 GBK...
 	bodyReader := bufio.NewReader(res.Body)
@@ -41,7 +39,7 @@ func Fetch(method, url string) ([]byte, error) {
 func DetectionEncode(r *bufio.Reader) encoding.Encoding {
 	bytes, err := r.Peek(1024)
 	if err != nil {
-		log.Printf("DetectionEncode Error:%#v", err)
+		log.Printf(`DetectionEncode Error:%#v`, err)
 		return unicode.UTF8
 	}
 	e, _, _ := charset.DetermineEncoding(bytes, "")

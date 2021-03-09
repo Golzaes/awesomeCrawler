@@ -15,12 +15,12 @@ func ScrapeExample() ([]byte, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://book.douban.com/tag/?view=cloud", nil)
 	if err != nil {
-		log.Printf("NewRequest Error:%#v", err)
+		return nil, fmt.Errorf("NewRequest Error:%#v", err)
 	}
-	req.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.192 Safari/537.36")
+	req.Header.Add(`User-Agent`, `Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.192 Safari/537.36`)
 	res, err := client.Do(req)
 	if err != nil {
-		log.Printf("Client Error:%#v", err)
+		return nil, fmt.Errorf(`client Error:%#v`, err)
 	}
 	defer res.Body.Close()
 	return ioutil.ReadAll(res.Body)

@@ -26,8 +26,8 @@ func RegexParseTag(content []byte) Engine.ParseResult {
 	return result
 }
 
-//CssParseTag use go query to parse txt
-func CssParseTag(content []byte) Engine.ParseResult {
+//QueryParseTag use go query to parse txt
+func QueryParseTag(content []byte) Engine.ParseResult {
 	result := Engine.ParseResult{}
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(content))
 	if err != nil {

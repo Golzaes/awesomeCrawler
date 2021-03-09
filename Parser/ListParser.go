@@ -1,8 +1,11 @@
 package Parser
 
 import (
+	"bytes"
+	"github.com/PuerkitoBio/goquery"
 	"github.com/payne/awesomeCrawler/Engine"
 	"log"
+	"net/url"
 	"regexp"
 )
 
@@ -25,9 +28,24 @@ func RegexParseList(content []byte) Engine.ParseResult {
 }
 
 // QueryParseList
-//func QueryParseList(content []byte) {
-//	fmt.Printf("QueryParseList:%s", content)
-//}
+func QueryParseList(content []byte) Engine.ParseResult {
+	result := Engine.ParseResult{}
+	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(content))
+	if err != nil {
+		log.Printf("NewDocumentFromReader err: %s", err)
+	}
+	// Find the review items
+	doc.Find("table tr td").Each(func(i int, s *goquery.Selection) {
+		tag := s.Find("a").Text()
+		log.Println(tag)
+		result.Request = append(result.Request, Engine.Request{
+			Method:    "GET",
+			URL:       "https://book.douban.com/tag/" + url.QueryEscape(tag),
+			ParseFunc: Engine.NilParse,
+		})
+	})
+	return result
+}
 
 // XpathParseList
 //func XpathParseList(body []byte) Engine.ParseResult {
