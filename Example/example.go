@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-// ScrapeExample
+//// ScrapeExample
 func ScrapeExample() ([]byte, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://book.douban.com/tag/?view=cloud", nil)
@@ -42,7 +42,7 @@ func CssParseExample(body []byte) {
 	})
 }
 
-// XpathParseExample
+//// XpathParseExample
 func XpathParseExample(body []byte) {
 	selector, err := htmlquery.Parse(bytes.NewReader(body))
 	if err != nil {
@@ -59,9 +59,9 @@ func XpathParseExample(body []byte) {
 	}
 }
 
-// func main() {
+func main() {
 	//body, _ := ScrapeExample()
-	////CssParseExample(body)
+	//CssParseExample(body)
 	//XpathParseExample(body)
 
-// }
+}
