@@ -35,8 +35,9 @@ func QueryParseList(content []byte) Engine.ParseResult {
 		log.Printf("NewDocumentFromReader err: %s", err)
 	}
 	// Find the review items
-	doc.Find("table tr td").Each(func(i int, s *goquery.Selection) {
-		tag := s.Find("a").Text()
+	doc.Find("#content .subject-list li.subject-item").Each(func(i int, s *goquery.Selection) {
+		title := s.Find(`.info h2 a`).Text()
+		href := s.Find(`.info h2 a`).Attr(`href`)
 		log.Println(tag)
 		result.Request = append(result.Request, Engine.Request{
 			Method:    "GET",
