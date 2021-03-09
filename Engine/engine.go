@@ -22,7 +22,7 @@ func Run(seed ...Request) {
 		ParseResult := request.ParseFunc(body)
 		requests = append(requests, ParseResult.Request...)
 		for _, item := range ParseResult.Item {
-			log.Printf("Get Item %s\n", item)
+			log.Printf("Getting Item %s\n", item)
 		}
 	}
 }

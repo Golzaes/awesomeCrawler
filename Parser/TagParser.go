@@ -19,7 +19,7 @@ func RegexParseTag(content []byte) Engine.ParseResult {
 		result.Item = append(result.Item, m[1])
 		result.Request = append(result.Request, Engine.Request{
 			Method:    "GET",
-			URL:       "https://book.douban.com/" + url.QueryEscape(string(m[1])),
+			URL:       `https://book.douban.com/` + url.QueryEscape(string(m[1])),
 			ParseFunc: Engine.NilParse,
 		})
 	}

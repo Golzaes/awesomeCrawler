@@ -6,10 +6,11 @@
 #RUN go mod tidy && go build
 #CMD ./awesomeCrawler
 #################################
-FROM golang as builder
-ENV GOPROXY=https://goproxy.cn,direct GO111MODULE="on" CGO_ENABLED="0" GOOS="linux" GOARCH="amd64"
+FROM golang:1.16 as builder
+ENV GOPROXY="https://goproxy.cn,direct" GO111MODULE="on" CGO_ENABLED="0" GOOS="linux" GOARCH="amd64"
 WORKDIR /go/src/github.com/payne/awesomeCrawler/
 COPY . .
+RUN go env
 RUN go build -o /tmp/awesomeCrawler .
 
 FROM alpine

@@ -1,18 +1,35 @@
 package Parser
 
-import "fmt"
+import (
+	"github.com/payne/awesomeCrawler/Engine"
+	"log"
+	"regexp"
+)
 
 // RegexParseList
-func RegexParseList(body []byte) {
-	fmt.Printf("RegexParseList:%s", body)
+func RegexParseList(content []byte) Engine.ParseResult {
+	result := Engine.ParseResult{}
+	re := regexp.MustCompile(`<a href="([^"]+)" title="([^"]+)"`)
+	matches := re.FindAllSubmatch(content, -1)
+	for _, m := range matches {
+		href := string(m[1])
+		title := string(m[2])
+		log.Printf("Title: %s href: %s", title, href)
+		result.Request = append(result.Request, Engine.Request{
+			Method:    "GET",
+			URL:       string(m[1]),
+			ParseFunc: Engine.NilParse,
+		})
+	}
+	return result
 }
 
 // QueryParseList
-func QueryParseList(body []byte) {
-	fmt.Printf("QueryParseList:%s", body)
-}
+//func QueryParseList(content []byte) {
+//	fmt.Printf("QueryParseList:%s", content)
+//}
 
 // XpathParseList
-func XpathParseList(body []byte) {
-	fmt.Printf("XpathParseList:%s", body)
-}
+//func XpathParseList(body []byte) Engine.ParseResult {
+//	fmt.Printf("XpathParseList:%s", body)
+//}

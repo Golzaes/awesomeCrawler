@@ -60,7 +60,8 @@ func XpathParseExample(body []byte) {
 }
 
 // func main() {
-// 	body, _ := ScrapeExample()
-// 	//CssParseExample(body)
-// 	XpathParseExample(body)
+	//body, _ := ScrapeExample()
+	////CssParseExample(body)
+	//XpathParseExample(body)
+
 // }
