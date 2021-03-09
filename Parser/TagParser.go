@@ -53,10 +53,10 @@ func XpathParseTag(content []byte) Engine.ParseResult {
 	if err != nil {
 		fmt.Printf("htmlquery Parse Error: %s", err)
 	}
-	nodes := htmlquery.Find(doc, `//table//tr/td`)
+	nodes := htmlquery.Find(doc, `//table[@class='tagCol']//tr/td`)
 	for _, node := range nodes {
-		tagHref := htmlquery.Find(node, `./a/@href`)
-		tagTxt := htmlquery.Find(node, `./a/text()`)
+		tagHref := htmlquery.Find(node, `./a`)
+		tagTxt := htmlquery.Find(node, `./a`)
 		href := htmlquery.SelectAttr(tagHref[0], `href`)
 		txt := htmlquery.InnerText(tagTxt[0])
 

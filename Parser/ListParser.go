@@ -2,10 +2,11 @@ package Parser
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/antchfx/htmlquery"
 	"github.com/payne/awesomeCrawler/Engine"
 	"log"
-	"net/url"
 	"regexp"
 )
 
@@ -36,12 +37,13 @@ func QueryParseList(content []byte) Engine.ParseResult {
 	}
 	// Find the review items
 	doc.Find("#content .subject-list li.subject-item").Each(func(i int, s *goquery.Selection) {
-		title := s.Find(`.info h2 a`).Text()
-		href := s.Find(`.info h2 a`).Attr(`href`)
-		log.Println(tag)
+		title, _ := s.Find(`.info h2 a`).Attr(`title`)
+		href, _ := s.Find(`.info h2 a`).Attr(`href`)
+		log.Println(title, href)
+
 		result.Request = append(result.Request, Engine.Request{
 			Method:    "GET",
-			URL:       "https://book.douban.com/tag/" + url.QueryEscape(tag),
+			URL:       href,
 			ParseFunc: Engine.NilParse,
 		})
 	})
@@ -49,6 +51,23 @@ func QueryParseList(content []byte) Engine.ParseResult {
 }
 
 // XpathParseList
-//func XpathParseList(body []byte) Engine.ParseResult {
-//	fmt.Printf("XpathParseList:%s", body)
-//}
+func XpathParseList(content []byte) Engine.ParseResult {
+	result := Engine.ParseResult{}
+	doc, err := htmlquery.Parse(bytes.NewReader(content))
+	if err != nil {
+		fmt.Printf("htmlquery Parse Error: %s", err)
+	}
+	nodes := htmlquery.Find(doc, `//div[@id="subject_list"]/ul/li[@class="subject-item"]`)
+	for _, node := range nodes {
+		li := htmlquery.Find(node, `./*[@class="info"]/h2/a`)
+		title := htmlquery.SelectAttr(li[0], `title`)
+		href := htmlquery.SelectAttr(li[0], `href`)
+		log.Printf(`Title: %s Href: %s`, title, href)
+		result.Request = append(result.Request, Engine.Request{
+			Method:    "GET",
+			URL:       href,
+			ParseFunc: Engine.NilParse,
+		})
+	}
+	return result
+}
