@@ -12,10 +12,6 @@ type ParseResult struct {
 	Item    []interface{}
 }
 
-//func NewParseResult(request []Request, item []interface{}) *ParseResult {
-//	return &ParseResult{Request: request, Item: item}
-//}
-
 func NilParse([]byte) ParseResult {
 	return ParseResult{}
 }

@@ -1,5 +1,7 @@
 package Parser
 
+import "sync"
+
 type BookDetail struct {
 	Title            string // 标题
 	Author           string // 作者
@@ -14,6 +16,8 @@ type BookDetail struct {
 	Introduction     string // 简介
 	Catalog          string // 目录
 }
+
+var syPool sync.Pool
 
 // QueryParseDetail
 //func QueryParseDetail(content []byte) BookDetail {
