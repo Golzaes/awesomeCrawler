@@ -20,7 +20,9 @@ type SimpleScheduler struct {
 }
 
 func (s SimpleScheduler) Submit(r Request) {
-	s.workerCh <- r
+	go func() {
+		s.workerCh <- r
+	}()
 }
 
 func (s *SimpleScheduler) configureWorkChan(c chan Request) {
@@ -129,4 +131,71 @@ func worker(getter Request) (ParseResult, error) {
 //	}
 //	return r.ParseFunc(body), err
 //
+//}
+
+//type ConcurrentEngine struct {
+//	Scheduler Scheduler
+//	WorkCount int
+//}
+//
+//type Scheduler interface {
+//	Submit(Request)
+//	configureWorkChan(chan Request)
+//}
+//
+//type SimpleScheduler struct {
+//	WorkChan chan Request
+//}
+//
+//func (s *SimpleScheduler) Submit(r Request) {
+//	s.WorkChan <- r
+//}
+//func (s *SimpleScheduler) configureWorkChan(c chan Request) {
+//	s.WorkChan = c
+//}
+//
+//func (e ConcurrentEngine) Run(seeds ...Request) {
+//	in := make(chan Request)
+//	out := make(chan ParseResult)
+//
+//	for i := 0; i < e.WorkCount; i++ {
+//		CreateWork(in, out)
+//	}
+//	for _, seed := range seeds {
+//		e.Scheduler.Submit(seed)
+//	}
+//	itemCount := 0
+//	for {
+//		result := <-out
+//		for _, item := range result.Item {
+//			log.Printf(`Got Item %d, %v`, itemCount, item)
+//			itemCount++
+//		}
+//		for _, request := range result.Request {
+//			e.Scheduler.Submit(request)
+//		}
+//	}
+//}
+//
+//func CreateWork(in chan Request, out chan ParseResult) {
+//	go func() {
+//		for {
+//			request := <-in
+//			result, err := worker(request)
+//			if err != nil {
+//				continue
+//			}
+//			out <- result
+//		}
+//	}()
+//}
+//
+//func worker(r Request) (ParseResult, error) {
+//	fmt.Printf(`Fetch URL: %s`, r.URL)
+//	body, err := Fetcher.Fetch(r.Method, r.URL)
+//	if err != nil {
+//		log.Printf(`Fetch Error: %s`, r.URL)
+//		return ParseResult{}, err
+//	}
+//	return r.ParseFunc(body), err
 //}

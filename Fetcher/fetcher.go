@@ -3,12 +3,9 @@ package Fetcher
 import (
 	"bufio"
 	"fmt"
-	"golang.org/x/net/html/charset"
-	"golang.org/x/text/encoding"
-	"golang.org/x/text/encoding/unicode"
+	"github.com/payne/awesomeCrawler/Tools"
 	"golang.org/x/text/transform"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -18,7 +15,7 @@ func Fetch(method, url string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf(`NewRequest Error:%#v`, err)
 	}
-	req.Header.Add(`User-Agent`, `Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.192 Safari/537.36`)
+	req.Header.Add(`User-Agent`, Tools.RandomUa())
 	res, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf(` Client Error:%#v`, err)
@@ -29,19 +26,8 @@ func Fetch(method, url string) ([]byte, error) {
 	}
 	// Detection encode，eg: UTF8 GBK...
 	bodyReader := bufio.NewReader(res.Body)
-	PageEncode := DetectionEncode(bodyReader)
+	PageEncode := Tools.DetectionEncode(bodyReader)
 	// recoding
 	encodedReader := transform.NewReader(bodyReader, PageEncode.NewDecoder())
 	return ioutil.ReadAll(encodedReader)
-}
-
-// DetectionEncode 检测网页编码，实现自动解码
-func DetectionEncode(r *bufio.Reader) encoding.Encoding {
-	bytes, err := r.Peek(1024)
-	if err != nil {
-		log.Printf(`DetectionEncode Error:%#v`, err)
-		return unicode.UTF8
-	}
-	e, _, _ := charset.DetermineEncoding(bytes, "")
-	return e
 }
