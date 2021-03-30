@@ -38,7 +38,21 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/Tools/head_test.go">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="$USER_HOME$/go/pkg/mod/github.com/gocolly/colly@v1.2.0/colly.go">
+          <value>
+            <Attribute>
+              <option name="separator" value="&#9;" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/example.go">
           <value>
             <Attribute>
               <option name="separator" value="&#9;" />
